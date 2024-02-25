@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 import { Appbar } from "../components/Appbar";
 import { endpoints } from "../configs/urls";
 import Loader from "../components/Loader";
-const { MoneyLoader, BalanceLoader } = Loader;
+const { MoneyLoader, BalanceLoader, TransferLoader } = Loader;
 
 export const SendMoney = () => {
   const [searchParams] = useSearchParams();
@@ -101,7 +101,7 @@ export const SendMoney = () => {
       <div className="flex justify-center h-screen bg-gray-100">
         <div className="h-full flex flex-col justify-center">
           {isLoading ? (
-            <MoneyLoader isLoading={isLoading} />
+            <TransferLoader isLoading={isLoading} />
           ) : (
             <div className="border h-min text-card-foreground max-w-md p-4 space-y-8 w-96 bg-white shadow-lg rounded-lg">
               <div className="flex flex-col space-y-1.5 p-6">

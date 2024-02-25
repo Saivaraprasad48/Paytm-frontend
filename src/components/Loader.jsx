@@ -2,12 +2,12 @@
 import { helix } from "ldrs";
 import { dotSpinner } from "ldrs";
 import { bouncy } from "ldrs";
+import { lineWobble } from "ldrs";
 
 helix.register();
 dotSpinner.register();
 bouncy.register();
-
-// Default values shown
+lineWobble.register();
 
 // Default values shown
 
@@ -36,4 +36,20 @@ function BalanceLoader({ isLoading }) {
   );
 }
 
-export default { MoneyLoader, BufferLoader, BalanceLoader };
+function TransferLoader({ isLoading }) {
+  return (
+    <div className="mt-0 inline ml-4" aria-live="polite" aria-busy={isLoading}>
+      {isLoading && (
+        <l-line-wobble
+          size="80"
+          stroke="5"
+          bg-opacity="0.1"
+          speed="1.75"
+          color="black"
+        ></l-line-wobble>
+      )}
+    </div>
+  );
+}
+
+export default { MoneyLoader, BufferLoader, BalanceLoader, TransferLoader };
