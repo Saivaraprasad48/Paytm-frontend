@@ -1,4 +1,5 @@
-const hostname = "http://localhost:5000/api/v1";
+// const hostname = "http://localhost:5000/api/v1";
+const hostname = "https://paytm-backend-ka57.onrender.com/api/v1";
 
 export const endpoints = {
   login: `${hostname}/user/signin`,
