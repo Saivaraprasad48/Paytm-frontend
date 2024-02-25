@@ -10,7 +10,7 @@ import { endpoints } from "../configs/urls";
 export const Users = () => {
   const [users, setUsers] = useState([]);
   const [filter, setFilter] = useState("");
-
+   const bulkApi = endpoints.getsearchusers;
   useEffect(() => {
     const delayDebounce = setTimeout(async () => {
       const config = {
@@ -21,7 +21,7 @@ export const Users = () => {
       };
       try {
         const response = await axios.get(
-          `${endpoints.getsearchusers}?filter=${filter}`,
+          `${bulkApi}?filter=${filter}`,
           config
         );
         setUsers(response.data.users);
