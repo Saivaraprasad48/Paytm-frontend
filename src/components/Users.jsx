@@ -20,8 +20,8 @@ export const Users = () => {
         },
       };
       try {
-        const response = await axios.get(
-          `${bulkApi}?filter=${filter}`,
+        const usersAPI = `${bulkApi}?filter=${filter}`
+        const response = await axios.get(usersAPI,
           config
         );
         setUsers(response.data.users);
