@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import { useState } from "react";
 import { BottomWarning } from "../components/BottomWarning";
 import { Button } from "../components/Button";
@@ -9,10 +10,13 @@ import { useNavigate } from "react-router-dom";
 import Image from "../assets/paytm.png";
 import { toast } from "react-toastify";
 import { endpoints } from "../configs/urls";
+import Loader from "../components/Loader";
+const { BufferLoader } = Loader;
 
 export const Signin = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
   console.log(endpoints);
   return (
@@ -35,10 +39,12 @@ export const Signin = () => {
             placeholder="123456"
             label={"Password"}
           />
+          <BufferLoader isLoading={isLoading} />
           <div className="pt-4">
             <Button
               onClick={async () => {
                 try {
+                  setIsLoading(true);
                   const response = await axios.post(endpoints.login, {
                     username,
                     password,
@@ -57,6 +63,7 @@ export const Signin = () => {
                     progress: undefined,
                     theme: "light",
                   });
+                  setIsLoading(false);
                 } catch (error) {
                   console.error("Error signing in:", error);
                   toast.error(
@@ -72,6 +79,7 @@ export const Signin = () => {
                       theme: "light",
                     }
                   );
+                  setIsLoading(false);
                 }
               }}
               label={"Sign in"}

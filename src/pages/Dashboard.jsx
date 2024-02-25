@@ -8,10 +8,11 @@ import { endpoints } from "../configs/urls";
 
 export const Dashboard = () => {
   const [balance, setBalance] = useState(0);
+  const [isLoading, setIsLoading] = useState(false);
   const user = localStorage.getItem("user");
-  console.log(endpoints);
   const fetchBalance = async () => {
     try {
+      setIsLoading(true);
       const token = localStorage.getItem("token");
       const config = {
         headers: {
@@ -21,7 +22,9 @@ export const Dashboard = () => {
 
       const response = await axios.get(endpoints.currentuserbalance, config);
       setBalance(response.data.balance);
+      setIsLoading(false);
     } catch (error) {
+      setIsLoading(false);
       console.error("Error fetching account balance:", error);
     }
   };
@@ -34,7 +37,7 @@ export const Dashboard = () => {
     <div>
       <Appbar user={user} />
       <div className="m-8">
-        <Balance value={balance.toFixed(2)} />
+        <Balance isLoading={isLoading} value={balance.toFixed(2)} />
         <Users />
       </div>
     </div>

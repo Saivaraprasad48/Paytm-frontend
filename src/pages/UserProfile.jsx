@@ -5,6 +5,8 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import { InputBox } from "../components/InputBox";
 import { endpoints } from "../configs/urls";
+import Loader from "../components/Loader";
+const { MoneyLoader } = Loader;
 
 const UserProfile = () => {
   const value = 0;
@@ -13,6 +15,7 @@ const UserProfile = () => {
   const token = localStorage.getItem("token");
   const [modal, setModal] = useState(false);
   const [updateModal, setUpdateModal] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [data, setData] = useState({
     firstName: "",
     lastName: "",
@@ -199,6 +202,7 @@ const UserProfile = () => {
 
   const fetchCurrentUser = async () => {
     try {
+      setIsLoading(true);
       const response = await axios.get(endpoints.getusers, {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -206,8 +210,10 @@ const UserProfile = () => {
         },
       });
       SetCurrentUser(response.data);
+      setIsLoading(false);
     } catch (error) {
       console.error("Error fetching current user:", error);
+      setIsLoading(false);
     }
   };
 
@@ -218,53 +224,59 @@ const UserProfile = () => {
   return (
     <div className="flex justify-center h-screen bg-gray-100">
       <div className="h-full flex flex-col justify-center">
-        <div className="border h-min text-card-foreground max-w-md p-4 w-96 bg-white shadow-lg rounded-lg">
-          <div className="flex flex-col space-y-1.5 p-6">
-            <h2 className="text-3xl font-bold text-center">Your Information</h2>
-            <div className="flex flex-col justify-center h-full text-xl pt-4">
-              <h1 className="text-center">
-                Name:
-                <span className="font-semibold pl-2">
-                  {currentuser?.firstName} {currentuser?.lastName}
-                </span>
-              </h1>
-              <h1 className="text-center pt-2">
-                Email:
-                <span className="font-semibold pl-2">
-                  {currentuser?.username}
-                </span>
-              </h1>
-              <h1 className="text-center pt-2">
-                Av. Balance:
-                <span className="font-semibold pl-2">
-                  {currentuser?.balance.toFixed(2)}
-                </span>
-              </h1>
+        {isLoading ? (
+          <MoneyLoader isLoading={isLoading} />
+        ) : (
+          <div className="border h-min text-card-foreground max-w-md p-4 w-96 bg-white shadow-lg rounded-lg">
+            <div className="flex flex-col space-y-1.5 p-6">
+              <h2 className="text-3xl font-bold text-center">
+                Your Information
+              </h2>
+              <div className="flex flex-col justify-center h-full text-xl pt-4">
+                <h1 className="text-center">
+                  Name:
+                  <span className="font-semibold pl-2">
+                    {currentuser?.firstName} {currentuser?.lastName}
+                  </span>
+                </h1>
+                <h1 className="text-center pt-2">
+                  Email:
+                  <span className="font-semibold pl-2">
+                    {currentuser?.username}
+                  </span>
+                </h1>
+                <h1 className="text-center pt-2">
+                  Av. Balance:
+                  <span className="font-semibold pl-2">
+                    {currentuser?.balance.toFixed(2)}
+                  </span>
+                </h1>
+              </div>
             </div>
+            <button
+              onClick={() => navigate("/dashboard")}
+              className="justify-center rounded-md mt-3 text-sm font-medium ring-offset-background transition-colors h-10 px-4 py-1 w-full bg-black text-white"
+            >
+              Go Back
+            </button>
+            <button
+              onClick={() => {
+                getUserDetails();
+              }}
+              className="justify-center rounded-md mt-3 text-sm font-medium ring-offset-background transition-colors h-10 px-4 py-1 w-full bg-black text-white"
+            >
+              Update Details
+            </button>
+            <button
+              onClick={() => {
+                getUserConfimation();
+              }}
+              className="justify-center mt-3 rounded-md text-sm font-medium h-10 px-4 w-full bg-red-700 text-white"
+            >
+              Delete Account
+            </button>
           </div>
-          <button
-            onClick={() => navigate("/dashboard")}
-            className="justify-center rounded-md mt-3 text-sm font-medium ring-offset-background transition-colors h-10 px-4 py-1 w-full bg-black text-white"
-          >
-            Go Back
-          </button>
-          <button
-            onClick={() => {
-              getUserDetails();
-            }}
-            className="justify-center rounded-md mt-3 text-sm font-medium ring-offset-background transition-colors h-10 px-4 py-1 w-full bg-black text-white"
-          >
-            Update Details
-          </button>
-          <button
-            onClick={() => {
-              getUserConfimation();
-            }}
-            className="justify-center mt-3 rounded-md text-sm font-medium h-10 px-4 w-full bg-red-700 text-white"
-          >
-            Delete Account
-          </button>
-        </div>
+        )}
         {renderModal()}
         {UpdateDetailsModal()}
       </div>

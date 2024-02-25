@@ -6,13 +6,17 @@ import { Button } from "./Button";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { endpoints } from "../configs/urls";
+import Loader from "../components/Loader";
+const { MoneyLoader } = Loader;
 
 export const Users = () => {
   const [users, setUsers] = useState([]);
   const [filter, setFilter] = useState("");
-   const bulkApi = endpoints.getsearchusers;
+  const [isLoading, setIsLoading] = useState(false);
+  const bulkApi = endpoints.getsearchusers;
   useEffect(() => {
     const delayDebounce = setTimeout(async () => {
+      setIsLoading(true);
       const config = {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -20,14 +24,14 @@ export const Users = () => {
         },
       };
       try {
-        const usersAPI = `${bulkApi}?filter=${filter}`
-        const response = await axios.get(usersAPI,
-          config
-        );
+        const usersAPI = `${bulkApi}?filter=${filter}`;
+        const response = await axios.get(usersAPI, config);
         setUsers(response.data.users);
+        setIsLoading(false);
       } catch (error) {
         // Handle errors here
         console.error("Error fetching users:", error);
+        setIsLoading(false);
       }
     }, 500);
 
@@ -48,11 +52,16 @@ export const Users = () => {
         ></input>
       </div>
       <div>
-        {users &&
+        {isLoading ? (
+          <div className="flex flex-row justify-center items-center h-[200px]">
+            <MoneyLoader isLoading={isLoading} />
+          </div>
+        ) : (
           users
             .filter((each) => localStorage.getItem("userId") !== each._id)
             .sort((a, b) => a.firstName.localeCompare(b.firstName))
-            .map((user) => <User key={user._id} user={user} />)}
+            .map((user) => <User key={user._id} user={user} />)
+        )}
       </div>
     </>
   );

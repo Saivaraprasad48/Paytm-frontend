@@ -10,12 +10,15 @@ import { useNavigate } from "react-router-dom";
 import Image from "../assets/paytm.png";
 import { toast } from "react-toastify";
 import { endpoints } from "../configs/urls";
+import Loader from "../components/Loader";
+const { BufferLoader } = Loader;
 
 export const Signup = () => {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
   return (
@@ -56,9 +59,11 @@ export const Signup = () => {
             placeholder="123456"
             label={"Password"}
           />
+          <BufferLoader isLoading={isLoading} />
           <div className="pt-4">
             <Button
               onClick={async () => {
+                setIsLoading(true);
                 try {
                   const response = await axios.post(endpoints.signup, {
                     username,
@@ -77,6 +82,7 @@ export const Signup = () => {
                     progress: undefined,
                     theme: "light",
                   });
+                  setIsLoading(false);
                 } catch (error) {
                   console.error("Error signing up:", error);
                   toast.error(
@@ -92,6 +98,7 @@ export const Signup = () => {
                       theme: "light",
                     }
                   );
+                  setIsLoading(false);
                 }
               }}
               label={"Sign up"}
