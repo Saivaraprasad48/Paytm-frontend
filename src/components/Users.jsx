@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { Button } from "./Button";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { endpoints } from "../configs/urls";
 
 export const Users = () => {
   const [users, setUsers] = useState([]);
@@ -20,7 +21,7 @@ export const Users = () => {
       };
       try {
         const response = await axios.get(
-          `http://localhost:5000/api/v1/user/bulk?filter=${filter}`,
+          `{endpoints.getsearchusers}?filter=${filter}`,
           config
         );
         setUsers(response.data.users);
