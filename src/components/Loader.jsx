@@ -9,8 +9,6 @@ dotSpinner.register();
 bouncy.register();
 lineWobble.register();
 
-// Default values shown
-
 function MoneyLoader({ isLoading }) {
   return (
     <div className="mt-2" aria-live="polite" aria-busy={isLoading}>
