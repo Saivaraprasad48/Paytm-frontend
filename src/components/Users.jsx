@@ -21,7 +21,7 @@ export const Users = () => {
       };
       try {
         const response = await axios.get(
-          `{endpoints.getsearchusers}?filter=${filter}`,
+          `${endpoints.getsearchusers}?filter=${filter}`,
           config
         );
         setUsers(response.data.users);
