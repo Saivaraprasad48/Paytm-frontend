@@ -75,7 +75,7 @@ export const SendMoney = () => {
       setIsLoading(false);
     } catch (e) {
       toast.error(
-        "There might be issue! Please go back & try again after while!",
+        `There might be issue! ${e.response.data.message}`,
         {
           position: "top-center",
           autoClose: 3000,
